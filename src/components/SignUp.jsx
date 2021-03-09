@@ -1,5 +1,6 @@
 import React, { useRef, useState } from "react";
 import { Form, Button, Card, Alert } from "react-bootstrap";
+import { Link, useHistory } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 
 const SignUp = () => {
@@ -8,8 +9,9 @@ const SignUp = () => {
 	const passwordConfirmRef = useRef();
 	const [err, seterr] = useState();
 	const [loading, setloading] = useState(false);
+	const history = useHistory();
 
-	const { signUp, currentUser } = useAuth();
+	const { signUp } = useAuth();
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
@@ -18,6 +20,7 @@ const SignUp = () => {
 			try {
 				seterr("");
 				await signUp(emailRef.current.value, passwordRef.current.value);
+				history.push("/");
 			} catch (er) {
 				seterr(er.message);
 			}
@@ -32,7 +35,6 @@ const SignUp = () => {
 			<Card>
 				<Card.Body>
 					<h2 className="text-center mb-4">Sign Up</h2>
-					{currentUser && currentUser.email}
 					{err && <Alert variant="danger">{err}</Alert>}
 					<Form onSubmit={handleSubmit}>
 						<Form.Group>
@@ -54,7 +56,7 @@ const SignUp = () => {
 				</Card.Body>
 			</Card>
 			<div className="w-100 text-center mt-2">
-				Already Have An Account ? Login
+				Already Have An Account ? <Link to="/login">Login</Link>
 			</div>
 		</>
 	);
