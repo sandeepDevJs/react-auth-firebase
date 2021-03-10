@@ -1,24 +1,25 @@
 import React, { useRef, useState } from "react";
 import { Form, Button, Card, Alert } from "react-bootstrap";
 import { useAuth } from "../contexts/AuthContext";
-import { Link, useHistory } from "react-router-dom";
+import { Link } from "react-router-dom";
 
-const Login = () => {
+const ForgotPassword = () => {
 	const emailRef = useRef();
-	const passwordRef = useRef();
+
 	const [err, seterr] = useState();
 	const [loading, setloading] = useState(false);
-	const history = useHistory();
+	const [message, setmessage] = useState("");
 
-	const { login } = useAuth();
+	const { resetPassword } = useAuth();
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 		setloading(true);
 		try {
+			setmessage("");
 			seterr("");
-			await login(emailRef.current.value, passwordRef.current.value);
-			history.push("/");
+			await resetPassword(emailRef.current.value);
+			setmessage("Check Mail For Further Instructions!");
 		} catch (er) {
 			seterr(er.message);
 		}
@@ -29,23 +30,20 @@ const Login = () => {
 		<>
 			<Card>
 				<Card.Body>
-					<h2 className="text-center mb-4">Login</h2>
+					<h2 className="text-center mb-4">Forgot Password</h2>
 					{err && <Alert variant="danger">{err}</Alert>}
+					{message && <Alert variant="success">{message}</Alert>}
 					<Form onSubmit={handleSubmit}>
 						<Form.Group>
 							<Form.Label>Email</Form.Label>
 							<Form.Control type="email" ref={emailRef} required />
 						</Form.Group>
-						<Form.Group>
-							<Form.Label>Password</Form.Label>
-							<Form.Control type="password" ref={passwordRef} required />
-						</Form.Group>
 						<Button disabled={loading} className="w-100" type="submit">
-							Login
+							Reset!
 						</Button>
 					</Form>
 					<div className="w-100 text-center mt-2">
-						<Link to="/forgotpassword">Forgot Password?</Link>
+						<Link to="/login">Log In</Link>
 					</div>
 				</Card.Body>
 			</Card>
@@ -56,4 +54,4 @@ const Login = () => {
 	);
 };
 
-export default Login;
+export default ForgotPassword;
