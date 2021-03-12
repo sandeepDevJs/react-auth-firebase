@@ -16,6 +16,7 @@ function App() {
 			style={{ minHeight: "100vh" }}
 		>
 			<div className="w-100" style={{ maxWidth: "400px" }}>
+				<h1>Firebase Auth Control</h1>
 				<Router>
 					<AuthProvider>
 						<Switch>
